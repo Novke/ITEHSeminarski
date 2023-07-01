@@ -56,5 +56,29 @@ public class Angazovanje implements Serializable {
     public void setAngazovanjeID(long angazovanjeID) {
         this.angazovanjeID = angazovanjeID;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 71 * hash + (int) (this.angazovanjeID ^ (this.angazovanjeID >>> 32));
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Angazovanje other = (Angazovanje) obj;
+        return true;
+    }
+    
+    
     
 }

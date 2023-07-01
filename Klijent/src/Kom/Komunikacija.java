@@ -26,7 +26,7 @@ public class Komunikacija {
         try {
             s = new Socket("localhost", 9000);
         } catch (IOException ex) {
-            Logger.getLogger(Komunikacija.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }
 

@@ -10,6 +10,7 @@ import domen.Predmet;
 import domen.Profesor;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,18 +22,18 @@ public class AngazovanjeDijalog extends javax.swing.JDialog {
     Angazovanje angazovnje;
     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
     java.awt.Frame parent;
-    List<Predmet> predmeti;
-    Profesor profesor;
+    List<Predmet> predmeti = new ArrayList<>();
+    KlijentskaForma kf;
 
     /**
      * Creates new form Angazovanje
      */
-    public AngazovanjeDijalog(java.awt.Frame parent, boolean modal, Angazovanje a, Profesor p) throws ParseException {
+    public AngazovanjeDijalog(java.awt.Frame parent, boolean modal, Angazovanje a, KlijentskaForma kf) throws ParseException {
         super(parent, modal);
         initComponents();
         angazovnje= a;
         this.parent = parent;
-        profesor = p;
+        this.kf = kf;
         prepare();
     }
 
@@ -112,11 +113,13 @@ public class AngazovanjeDijalog extends javax.swing.JDialog {
             try {
                 a.setDatumAngazovanja(sdf.parse(txtDatum.getText()));
             a.setPredmet(predmeti.get(cmbPredmet.getSelectedIndex()));
-            a.setProfesor(profesor);
+            kf.dodaj(a);
             } catch (ParseException ex) {
                 Logger.getLogger(AngazovanjeDijalog.class.getName()).log(Level.SEVERE, null, ex);
                 return;
             }
+        } else {
+            kf.izmeni(angazovnje);
         }
     }//GEN-LAST:event_btnOKActionPerformed
 
@@ -132,9 +135,18 @@ public class AngazovanjeDijalog extends javax.swing.JDialog {
 
     private void prepare() throws ParseException {
         Kom.Komunikacija.getInstance().posaljiZahtev(new KlijentskiZahtev(Operacije.VRATI_PREDMETE, null));
-        predmeti = (List<Predmet>) Kom.Komunikacija.getInstance().primiOdgovor().getOdgovor();
-        for (Predmet p: predmeti){
-            cmbPredmet.addItem(p.getNaziv());
+        //predmeti = (List<Predmet>) Kom.Komunikacija.getInstance().primiOdgovor().getOdgovor();
+        Predmet p = new Predmet();
+        p.setNaziv("Proj Soft");
+        Predmet p1 = new Predmet();
+        p1.setNaziv("Programiranje 1");
+        Predmet p2 = new Predmet();
+        p1.setNaziv("Menadzment");
+        predmeti.add(p);
+        predmeti.add(p1);
+        predmeti.add(p2);
+        for (Predmet pr: predmeti){
+            cmbPredmet.addItem(pr.getNaziv());
         }
         if (angazovnje != null){;
         }

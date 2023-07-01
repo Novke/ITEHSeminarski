@@ -4,10 +4,14 @@
  */
 package Form;
 
+import domen.Angazovanje;
 import domen.Predmet;
 import domen.Radnik;
+import java.text.ParseException;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -19,8 +23,9 @@ import javax.swing.table.TableModel;
 public class KlijentskaForma extends javax.swing.JFrame {
     
     Radnik radnik;
-    TableModel model = new DefaultTableModel();
+    DefaultTableModel model = new DefaultTableModel();
     List<Predmet> predmeti = new ArrayList<>();
+    List<Angazovanje> angazovanja = new ArrayList<>();
 
     /**
      * Creates new form KlijentskaForma
@@ -55,7 +60,7 @@ public class KlijentskaForma extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tabela = new javax.swing.JTable();
         jButton4 = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -98,10 +103,20 @@ public class KlijentskaForma extends javax.swing.JFrame {
         });
 
         jButton2.setText("Izmeni ang");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Obrisi ang");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tabela.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -112,7 +127,7 @@ public class KlijentskaForma extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tabela);
 
         jButton4.setText("Sacuvaj");
 
@@ -193,9 +208,32 @@ public class KlijentskaForma extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        JDialog dialog = new AngazovanjeDijalog(this, true, null);
-        dialog.setVisible(true);
+        try {
+            JDialog dialog = new AngazovanjeDijalog(this, true, null, this);
+            dialog.setVisible(true);
+        } catch (ParseException ex) {
+            Logger.getLogger(KlijentskaForma.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        int ind = tabela.getSelectedRow();
+        if (ind < 0) return;
+        Angazovanje a = angazovanja.get(ind);
+        try {
+            JDialog dialog = new AngazovanjeDijalog(this, true, a, this);
+            dialog.setVisible(true);
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        int ind = tabela.getSelectedRow();
+        if (ind < 0) return;
+        angazovanja.remove(ind);
+        popuniTabelu();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
    
 
@@ -212,15 +250,43 @@ public class KlijentskaForma extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel lblRadnik;
+    private javax.swing.JTable tabela;
     private javax.swing.JTextField txtEmail;
     // End of variables declaration//GEN-END:variables
 
     private void prepareForm() {
         lblRadnik.setText("Radnik: " + radnik.getIme() + " " + radnik.getPrezime());
         
+        tabela.setModel(model);
+        model.addColumn("Predmet");
+        model.addColumn("Datum");
+        
+    }
+
+    void dodaj(Angazovanje a) {
+        angazovanja.add(a);
+        popuniTabelu();
+    }
+
+    void izmeni(Angazovanje angazovnje) {
+        int ind = angazovanja.indexOf(angazovnje);
+        angazovanja.remove(ind);
+        angazovanja.add(angazovnje);
+    }
+
+    private void popuniTabelu() {
+        model.setRowCount(0);
+        
+        for (Angazovanje a: angazovanja){
+            dodajUtabelu(a);
+        }
+    }
+
+    private void dodajUtabelu(Angazovanje a) {
+        Object[] o = {a.getPredmet().getNaziv(), a.getDatumAngazovanja()};
+        model.addRow(o);
     }
 }
