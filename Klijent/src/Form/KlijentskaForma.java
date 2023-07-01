@@ -8,6 +8,7 @@ import domen.Predmet;
 import domen.Radnik;
 import java.util.List;
 import java.util.ArrayList;
+import javax.swing.JDialog;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -90,6 +91,11 @@ public class KlijentskaForma extends javax.swing.JFrame {
         });
 
         jButton1.setText("Dodaj ang");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Izmeni ang");
 
@@ -185,6 +191,11 @@ public class KlijentskaForma extends javax.swing.JFrame {
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        JDialog dialog = new AngazovanjeDijalog(this, true, null);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
    
 

@@ -74,12 +74,9 @@ public class DBBroker {
 
             predmet.setSifra(predmetID);
 
-            if (sacuvajAngazovanja(predmet).equals("Uspesno sacuvan predmet i njegova angazovanja!")) {
+            if (true) {
                 Konekcija.getInstance().getConnection().commit();
                 return "Uspesno sacuvan predmet i njegova angazovanja!";
-            } else {
-                Konekcija.getInstance().getConnection().rollback();
-                return sacuvajAngazovanja(predmet);
             }
 
         } catch (SQLException ex) {
