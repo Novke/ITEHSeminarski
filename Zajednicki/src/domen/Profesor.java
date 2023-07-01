@@ -5,6 +5,8 @@
 package domen;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -17,6 +19,16 @@ public class Profesor implements Serializable{
     private String email;
     private String zvanje;
     private String radnikEmail;
+    private List<Angazovanje> angazovanja = new ArrayList<>();
+
+    public List<Angazovanje> getAngazovanja() {
+        return angazovanja;
+    }
+
+    public void setAngazovanja(List<Angazovanje> angazovanja) {
+        this.angazovanja = angazovanja;
+    }
+    
 
     public Profesor() {
     }

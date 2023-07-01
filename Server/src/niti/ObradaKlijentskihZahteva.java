@@ -71,6 +71,9 @@ public class ObradaKlijentskihZahteva extends Thread {
                             .vratiAngazovanjaProfesora(profesorAngazovanje);
                     so.setOdgovor(angazovanjaProfesora);
                     break;
+                    
+                    
+                    
                 case Operacije.OBRISI_ANGAZOVANJE:
                     Angazovanje angazovanjeZaBrisanje = (Angazovanje) kz.getParametar();
                     boolean uspesnoBrisanjeAngazovanja = Kontroler.getInstance().obrisiAngazovanje(angazovanjeZaBrisanje);

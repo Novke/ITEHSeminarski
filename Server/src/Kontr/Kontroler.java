@@ -71,7 +71,7 @@ public class Kontroler {
         try {
             return dbb.obrisiAngazovanje(angazovanjeZaBrisanje);
         } catch (SQLException ex) {
-            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         return false;
     }
@@ -80,7 +80,7 @@ public class Kontroler {
         try {
             return dbb.dodajAngazovanje(angazovanjeZaDodavanje);
         } catch (SQLException ex) {
-            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         return false;
     }
@@ -93,17 +93,10 @@ public class Kontroler {
         try {
             return dbb.izmeniAngazovanje(angazovanjeZaIzmenu);
         } catch (SQLException ex) {
-            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         return false;
     }
 
-    public ArrayList<ProfesorPredmeti> vratiProfesorPredmete() {
-        return dbb.vratiProfesorPredmete();
-    }
-
-    public ArrayList<Zvanje> vratiZvanja() {
-        return dbb.vratiZvanja();
-    }
 
 }

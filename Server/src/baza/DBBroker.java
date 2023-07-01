@@ -10,10 +10,7 @@ import domen.Profesor;
 import java.sql.*;
 import java.util.ArrayList;
 
-/**
- *
- * @author Novica
- */
+
 public class DBBroker {
     
     public ArrayList<Profesor> vratiProfesore() {
@@ -94,29 +91,70 @@ public class DBBroker {
     }
     
     
-    private String sacuvajAngazovanja(Predmet predmet) throws SQLException {
-        String upit = "INSERT INTO ANGAZOVANJE (DatumAngazovanja, EmailKorisnika, "
-                + "ProfesorID, PredmetID) VALUES (?,?,?,?)";
+//    private String sacuvajAngazovanja(Predmet predmet) throws SQLException {
+//        String upit = "INSERT INTO ANGAZOVANJE (DatumAngazovanja, EmailKorisnika, "
+//                + "ProfesorID, PredmetID) VALUES (?,?,?,?)";
+//        try {
+//            PreparedStatement ps = Konekcija.getInstance().getConnection().prepareStatement(upit);
+//
+//            for (Angazovanje angazovanje : predmet.getAngazovanja()) {
+//
+//                if (proveriDaLiJeAngazovanNaTriIliVisePredmeta(angazovanje.getProfesor())) {
+//                    Konekcija.getInstance().getConnection().rollback();
+//                    return "Profesor " + angazovanje.getProfesor().toString() + " je "
+//                            + "vec angazovan na vise od 3 predmeta!";
+//                }
+//
+//                angazovanje.setPredmet(predmet);
+//                ps.setDate(1, new Date(angazovanje.getDatumAngazovanja().getTime()));
+//                ps.setString(2, angazovanje.getEmailKorisnika());
+//                ps.setLong(3, angazovanje.getProfesor().getProfesorID());
+//                ps.setLong(4, angazovanje.getPredmet().getPredmetID());
+//
+//                ps.addBatch();
+//            }
+//
+//            ps.executeBatch();
+//            Konekcija.getInstance().getConnection().commit();
+//
+//            return "Uspesno sacuvan predmet i njegova angazovanja!";
+//
+//        } catch (SQLException ex) {
+//            Konekcija.getInstance().getConnection().rollback();
+//            ex.printStackTrace();
+//        }
+//        return "Desila se greska prilikom cuvanja predmeta i angazovanja...";
+//    }
+    
+    private String sacuvajAngazovanja(Profesor profesor, Predmet predmet) throws SQLException {
+        String upit = "INSERT INTO ANGAZOVANJE (Datum, profesorid, predmetid)"
+                + " VALUES (?,?,?,?)";
         try {
             PreparedStatement ps = Konekcija.getInstance().getConnection().prepareStatement(upit);
+            
 
-            for (Angazovanje angazovanje : predmet.getAngazovanja()) {
+            for (Angazovanje angazovanje : profesor.getAngazovanja()) {
 
-                if (proveriDaLiJeAngazovanNaTriIliVisePredmeta(angazovanje.getProfesor())) {
-                    Konekcija.getInstance().getConnection().rollback();
-                    return "Profesor " + angazovanje.getProfesor().toString() + " je "
-                            + "vec angazovan na vise od 3 predmeta!";
-                }
+//                if (proveriDaLiJeAngazovanNaTriIliVisePredmeta(angazovanje.getProfesor())) {
+//                    Konekcija.getInstance().getConnection().rollback();
+//                    return "Profesor " + angazovanje.getProfesor().toString() + " je "
+//                            + "vec angazovan na vise od 3 predmeta!";
+//                }
+
+                
 
                 angazovanje.setPredmet(predmet);
                 ps.setDate(1, new Date(angazovanje.getDatumAngazovanja().getTime()));
-                ps.setString(2, angazovanje.getEmailKorisnika());
-                ps.setLong(3, angazovanje.getProfesor().getProfesorID());
-                ps.setLong(4, angazovanje.getPredmet().getPredmetID());
+                ps.setString(2, angazovanje.getProfesor().getEmail());
+                ps.setLong(3, angazovanje.getPredmet().getSifra());
 
                 ps.addBatch();
             }
-
+            
+            if (vratiAngazovanja(profesor).size()>=4){
+                return "Profesor " + profesor.toString() + " je "
+                            + "vec angazovan na vise od 3 predmeta!";
+            }
             ps.executeBatch();
             Konekcija.getInstance().getConnection().commit();
 
