@@ -11,14 +11,12 @@ public class Angazovanje implements Serializable {
     
     private long angazovanjeID;
     private Date datumAngazovanja;
-    private String emailKorisnika;
     private Profesor profesor;
     private Predmet predmet;
 
-    public Angazovanje(long angazovanjeID, Date datumAngazovanja, String emailKorisnika, Profesor profesor, Predmet predmet) {
+    public Angazovanje(long angazovanjeID, Date datumAngazovanja, Profesor profesor, Predmet predmet) {
         this.angazovanjeID = angazovanjeID;
         this.datumAngazovanja = datumAngazovanja;
-        this.emailKorisnika = emailKorisnika;
         this.profesor = profesor;
         this.predmet = predmet;
     }
@@ -50,13 +48,6 @@ public class Angazovanje implements Serializable {
         this.datumAngazovanja = datumAngazovanja;
     }
 
-    public String getEmailKorisnika() {
-        return emailKorisnika;
-    }
-
-    public void setEmailKorisnika(String emailKorisnika) {
-        this.emailKorisnika = emailKorisnika;
-    }
 
     public long getAngazovanjeID() {
         return angazovanjeID;

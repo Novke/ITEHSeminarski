@@ -21,6 +21,9 @@ public class Profesor implements Serializable{
     public Profesor() {
     }
 
+    
+    
+
     public Profesor(String ime, String prezime, String email, String zvanje, String radnikEmail) {
         this.ime = ime;
         this.prezime = prezime;
