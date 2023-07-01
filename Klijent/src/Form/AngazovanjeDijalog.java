@@ -4,22 +4,35 @@
  */
 package Form;
 
+import Konstate.Operacije;
 import domen.Angazovanje;
+import domen.Predmet;
+import domen.Profesor;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import transfer.KlijentskiZahtev;
 
 
 public class AngazovanjeDijalog extends javax.swing.JDialog {
     
     Angazovanje angazovnje;
     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+    java.awt.Frame parent;
+    List<Predmet> predmeti;
+    Profesor profesor;
 
     /**
      * Creates new form Angazovanje
      */
-    public AngazovanjeDijalog(java.awt.Frame parent, boolean modal, Angazovanje a) {
+    public AngazovanjeDijalog(java.awt.Frame parent, boolean modal, Angazovanje a, Profesor p) throws ParseException {
         super(parent, modal);
         initComponents();
         angazovnje= a;
+        this.parent = parent;
+        profesor = p;
         prepare();
     }
 
@@ -46,7 +59,14 @@ public class AngazovanjeDijalog extends javax.swing.JDialog {
 
         cmbPredmet.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        txtDatum.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd.MM.yyyy"))));
+
         btnOK.setText("OK");
+        btnOK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOKActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -86,6 +106,20 @@ public class AngazovanjeDijalog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
+        if (angazovnje == null){
+            Angazovanje a = new Angazovanje();
+            try {
+                a.setDatumAngazovanja(sdf.parse(txtDatum.getText()));
+            a.setPredmet(predmeti.get(cmbPredmet.getSelectedIndex()));
+            a.setProfesor(profesor);
+            } catch (ParseException ex) {
+                Logger.getLogger(AngazovanjeDijalog.class.getName()).log(Level.SEVERE, null, ex);
+                return;
+            }
+        }
+    }//GEN-LAST:event_btnOKActionPerformed
+
   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -96,9 +130,13 @@ public class AngazovanjeDijalog extends javax.swing.JDialog {
     private javax.swing.JFormattedTextField txtDatum;
     // End of variables declaration//GEN-END:variables
 
-    private void prepare() {
-        if (angazovnje != null){
-            
+    private void prepare() throws ParseException {
+        Kom.Komunikacija.getInstance().posaljiZahtev(new KlijentskiZahtev(Operacije.VRATI_PREDMETE, null));
+        predmeti = (List<Predmet>) Kom.Komunikacija.getInstance().primiOdgovor().getOdgovor();
+        for (Predmet p: predmeti){
+            cmbPredmet.addItem(p.getNaziv());
+        }
+        if (angazovnje != null){;
         }
     }
 }
